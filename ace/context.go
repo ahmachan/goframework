@@ -18,7 +18,7 @@ const (
 	abortIndex     = math.MaxInt8 / 2
 )
 
-//C is context for every goroutine Gcont
+//C is context for every goroutine
 type C struct {
 	writercache responseWriter
 	params      httprouter.Params
@@ -29,6 +29,11 @@ type C struct {
 	data        map[string]interface{}
 	//sessions    *sessions.Sessions
 	render      Renderer
+}
+
+type param struct {
+	key string
+	val string
 }
 
 func (a *Ace) createContext(w http.ResponseWriter, r *http.Request) *C {
@@ -165,6 +170,7 @@ func (c *C) GetAll() map[string]interface{} {
 
 func (c *C) MustQueryInt(key string, d int) int {
 	val := c.Request.URL.Query().Get(key)
+        fmt.Println("MustQueryInt:",c.Request)
 	if val == "" {
 		return d
 	}
@@ -288,3 +294,31 @@ func (c *C) Panic(err error) {
 		panic(err)
 	}
 }
+
+// 获取Get参数
+/*
+func (t *C)GetParam(key string) *C {
+        str := t.Request.URL.Query().Get(key)
+  	t.param.val = str
+	t.param.key = key      
+	return t
+}
+
+func (c *C)GetInt() int {
+	var (
+		i int
+		err error
+	)
+
+	if c.params.val == "" {
+		i = 0
+	} else {
+		i, err = strconv.Atoi(c.params.val)
+		if err != nil {
+		    panic(err)
+		}
+	}
+
+	return i
+}
+*/

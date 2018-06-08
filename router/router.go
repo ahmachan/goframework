@@ -1,6 +1,6 @@
 package routers
 import (
-	"goframework/framework"
+	//"goframework/framework"
 	"goframework/ace"
 	"goframework/api"
 	//"goframework/Domain"
@@ -41,25 +41,18 @@ func NewRouter() *ace.Ace {
         	context.JSON(200, apiRes)
                 */
 
-
-                request := framework.NewRequest(context)
-		response := framework.NewResponse(context)
-		defer request.ErrorLogRecover()
-
-		uid := request.GetParam("uid").GetInt()
-
-		//参数过滤error处理
-		if err := request.GetError(); err != nil {
-			return response.RetError(err, -1)
-		}
-
-		//user, err := this.Domain.User.GetUserInfo(id)
-		//if err != nil {
-		//	return Response.RetError(err, 400)
-		//}
+                fmt.Println("context:",context,"\n")
+                
+		//uid2 := context.MustQueryInt("uid",0)
+                uid2 := context.Param("uid")
+		fmt.Println("userId:",uid2,"\n")
+                limit := context.MustQueryInt("limit",0)
+		fmt.Println("limit:",limit,"\n")
+                uid := 2
                 apiRes := api.GetHello(uid)
 
-		return response.RetSuccess(apiRes)
+		//return response.RetSuccess(apiRes)
+                context.JSON(200, apiRes)
         })
 
         // /user/:name
