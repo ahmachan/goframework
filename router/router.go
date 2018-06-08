@@ -1,9 +1,9 @@
 package routers
 import (
-	"phalgo-sample/framework"
-	"phalgo-sample/ace"
-	"phalgo-sample/api"
-	//"phalgo-sample/Domain"
+	"goframework/framework"
+	"goframework/ace"
+	"goframework/api"
+	//"goframework/Domain"
         "fmt"
 )
 
@@ -29,18 +29,37 @@ func NewRouter() *ace.Ace {
 
         // /user/:name
         g.GET("/:uid", func(context *ace.C) {
+                /*
                 userIdstr := context.Param("uid") //return string	
                 userId := framework.TurnInt(userIdstr)
                 apiRes := api.GetHello(userId)
                 //apiRes := map[string]string{"TEST": userIdstr}
                 fmt.Println("id: "+userIdstr)
                 fmt.Println("userId: ",userId)
-                //if (err!=nil){
-                //   fmt.Println(err)
-                //}
-        	//context.JSON(200, map[string]string{"TEST": apiRes})
+       
                 //c.JSON(status int, v interface{})
         	context.JSON(200, apiRes)
+                */
+
+
+                request := framework.NewRequest(context)
+		response := framework.NewResponse(context)
+		defer request.ErrorLogRecover()
+
+		uid := request.GetParam("uid").GetInt()
+
+		//参数过滤error处理
+		if err := request.GetError(); err != nil {
+			return response.RetError(err, -1)
+		}
+
+		//user, err := this.Domain.User.GetUserInfo(id)
+		//if err != nil {
+		//	return Response.RetError(err, 400)
+		//}
+                apiRes := api.GetHello(uid)
+
+		return response.RetSuccess(apiRes)
         })
 
         // /user/:name

@@ -1,5 +1,5 @@
 package Model
-import "phalgo-sample/framework"
+import "goframework/framework"
 
 
 type User struct {

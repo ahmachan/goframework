@@ -1,6 +1,6 @@
 package Domain
 import (
-	"phalgo-sample/Model"
+	"goframework/Model"
 )
 
 

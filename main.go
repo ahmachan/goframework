@@ -1,8 +1,8 @@
 package main
 
 import (
-	"phalgo-sample/framework"
-	"phalgo-sample/router"
+	"goframework/framework"
+	"goframework/router"
         "fmt"
 )
 

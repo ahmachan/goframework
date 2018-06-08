@@ -1,7 +1,7 @@
 package api
 
 import (
-	"phalgo-sample/Domain"
+	"goframework/Domain"
         //"encoding/json"
         "fmt"
 )
