@@ -3,7 +3,7 @@ package main
 import (
 	"goframework/framework"
 	"goframework/router"
-        "fmt"
+    "fmt"
 )
 
 func main() {

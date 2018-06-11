@@ -3,7 +3,7 @@ import (
 	//"goframework/framework"
 	"goframework/ace"
 	"goframework/api"
-	//"goframework/Domain"
+	//"goframework/utils"
         "fmt"
 )
 
@@ -16,42 +16,27 @@ func NewRouter() *ace.Ace {
         })
 
         g.GET("/", func(context *ace.C) {
-                apiRes := map[string]string{"TEST": "home"}     
-                //apiRes := api.GetHello(2)
-                
-                fmt.Println(apiRes)
-                //if (err!=nil){
-                //   fmt.Println(err)
-                //}        	
-                //c.JSON(status int, v interface{})
-        	context.JSON(200, apiRes)
-        })
-
-        // /user/:name
-        g.GET("/:uid", func(context *ace.C) {
-                /*
-                userIdstr := context.Param("uid") //return string	
-                userId := framework.TurnInt(userIdstr)
-                apiRes := api.GetHello(userId)
-                //apiRes := map[string]string{"TEST": userIdstr}
-                fmt.Println("id: "+userIdstr)
-                fmt.Println("userId: ",userId)
-       
-                //c.JSON(status int, v interface{})
-        	context.JSON(200, apiRes)
-                */
-
-                fmt.Println("context:",context,"\n")
-                
-		//uid2 := context.MustQueryInt("uid",0)
-                uid2 := context.Param("uid")
-		fmt.Println("userId:",uid2,"\n")
+ 
+                fmt.Println("context:",context,"\n")                
+	
                 limit := context.MustQueryInt("limit",0)
 		fmt.Println("limit:",limit,"\n")
-                uid := 2
+                apiRes := api.GetUserList()
+
+                context.JSON(200, apiRes)
+        })
+
+        // /user/:uid
+        g.GET("/:uid/details", func(context *ace.C) {
+                fmt.Println("context:",context,"\n")                
+		//uid2 := context.MustQueryInt("uid",0) //at url query   ,or at form data
+                uid := context.MustPathInt("uid",0) //at path link
+                
+		fmt.Println("userId:",uid,"\n")
+                limit := context.MustQueryInt("limit",0)
+		fmt.Println("limit:",limit,"\n")
                 apiRes := api.GetHello(uid)
 
-		//return response.RetSuccess(apiRes)
                 context.JSON(200, apiRes)
         })
 
@@ -60,6 +45,7 @@ func NewRouter() *ace.Ace {
         	context.JSON(200, map[string]string{"TEST": "POST METHOD"})
         })
 
+        // user/12345/tags
         g.GET("/:uid/tags",func(context *ace.C){
                userId := context.Param("uid")
                context.JSON(200, map[string]string{"TAGS": "block:"+userId})

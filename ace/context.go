@@ -170,7 +170,7 @@ func (c *C) GetAll() map[string]interface{} {
 
 func (c *C) MustQueryInt(key string, d int) int {
 	val := c.Request.URL.Query().Get(key)
-        fmt.Println("MustQueryInt:",c.Request)
+    //fmt.Println("MustQueryInt:",c.Request)
 	if val == "" {
 		return d
 	}
@@ -187,7 +187,7 @@ func (c *C) MustQueryFloat64(key string, d float64) float64 {
 	if val == "" {
 		return d
 	}
-	f, err := strconv.ParseFloat(c.Request.URL.Query().Get(key), 64)
+	f, err := strconv.ParseFloat(val, 64)
 	if err != nil {
 		panic(err)
 	}
@@ -218,7 +218,7 @@ func (c *C) MustQueryTime(key string, layout string, d time.Time) time.Time {
 	if val == "" {
 		return d
 	}
-	t, err := time.Parse(layout, c.Request.URL.Query().Get(key))
+	t, err := time.Parse(layout, val)
 	if err != nil {
 		panic(err)
 	}
@@ -246,7 +246,7 @@ func (c *C) MustPostFloat64(key string, d float64) float64 {
 	if val == "" {
 		return d
 	}
-	f, err := strconv.ParseFloat(c.Request.URL.Query().Get(key), 64)
+	f, err := strconv.ParseFloat(val, 64)
 	if err != nil {
 		panic(err)
 	}
@@ -260,7 +260,7 @@ func (c *C) MustPostString(key, d string) string {
 		return d
 	}
 
-	return val
+	return string(val)
 }
 
 func (c *C) MustPostStrings(key string, d []string) []string {
@@ -281,7 +281,7 @@ func (c *C) MustPostTime(key string, layout string, d time.Time) time.Time {
 	if val == "" {
 		return d
 	}
-	t, err := time.Parse(layout, c.Request.URL.Query().Get(key))
+	t, err := time.Parse(layout, val)
 	if err != nil {
 		panic(err)
 	}
@@ -295,30 +295,38 @@ func (c *C) Panic(err error) {
 	}
 }
 
-// 获取Get参数
-/*
-func (t *C)GetParam(key string) *C {
-        str := t.Request.URL.Query().Get(key)
-  	t.param.val = str
-	t.param.key = key      
-	return t
-}
-
-func (c *C)GetInt() int {
-	var (
-		i int
-		err error
-	)
-
-	if c.params.val == "" {
-		i = 0
-	} else {
-		i, err = strconv.Atoi(c.params.val)
-		if err != nil {
-		    panic(err)
-		}
+func (c *C) MustPathInt(key string, d int) int {
+	val := c.Param(key)
+	if val == "" {
+		return d
+	}
+	i, err := strconv.Atoi(val)
+	if err != nil {
+		panic(err.Error())
 	}
 
 	return i
 }
-*/
+
+func (c *C) MustPathString(key string, d string) string {
+	val := c.Param(key)
+	if (val == ""|| string(val)=="") {
+		return d
+	}
+    
+	return string(val);
+}
+
+
+func (c *C) GetParamInt(key string, d int) int {
+	val := c.Param(key)
+	if val == "" {
+		return d
+	}
+	i, err := strconv.Atoi(val)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return i
+}

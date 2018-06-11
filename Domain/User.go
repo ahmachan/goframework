@@ -7,11 +7,21 @@ import (
 
 func GetHello(id int) (Model.User, error) {
 
-	user, err := Model.GetInfo(id)
+	user, err := Model.GetUserInfo(id)
 	if err != nil {
-		return user, errors.New("UserInfo There is no")
+		return user, errors.New("empty userinfo")
 	}
 	return user, nil
+}
+
+func GetUserList() ([]Model.User, error) {
+
+	user, err := Model.GetUserList()
+	if err != nil {
+		return user, errors.New("no userinfo list")
+	}
+	return user, nil
+
 }
 
 /*

@@ -1,72 +1,88 @@
 package api
 
 import (
+    "goframework/utils"
 	"goframework/Domain"
-        "encoding/json"
-        "fmt"
-        "os"
+    //"encoding/json"
+    "fmt"
+    //"os"
 )
 
+/*
 type ApiResData struct {
      object     interface{} `json:"object"`
      list       interface{} `json:"list"`
      extend     interface{} `json:"extend"`
 }
+*/
 
 type ApiResult struct {
-     code     string `json:"code"`
-     message  string `json:"message"`
-     data     interface{} `json:"data"`
+    Code     string `json:"code"`
+    Message  string `json:"message"`
+    Data     map[string]interface{} `json:"data"`
 }
 
-
-func GetHello(id int) interface{} {
-     userList,err := Domain.GetHello(id)
-     apiCode := "1"
-     apiMsg := "OK"
-     var result ApiResult
-     if (err!=nil){
+func GetHello(id int) map[string]interface{} {
+    userList,err := Domain.GetHello(id)
+    //userList,err := Domain.GetUserList()
+    apiCode := "1"
+    apiMsg := "OK"
+    var result ApiResult
+    if (err!=nil){
         fmt.Println(err)
         apiCode = "2001"
         apiMsg = "failed"
-     }
+    }
 
-     resData := ApiResData{
+    //注意，最后一项"extend:nil,"如果没有逗号，则}不能另起新行，否则会报错  
+    /*
+    resData := ApiResData{
         object:userList,
         list:nil,
-        extend:nil}//注意，如果没有逗号，则}不能另起新行，否则会报错  
-     result.code = apiCode
-     result.message= apiMsg
-     result.data= resData
-     fmt.Println("resData: ",resData)
-     /* 
-     result:=map[string]string{
-               "code": apiCode,
-               "message":apiMsg}
-     */
+        extend:nil,
+    }
+    */
+        
+ 
+    //result.Code = apiCode
+    //result.Message= apiMsg
+    //result.Data= utils.StructToMap2(userList)
 
-    type ColorGroup struct {  
-        ID     int  
-        Name   string  
-        Colors []string  
-    }  
-    group := ColorGroup{  
-        ID:     1,  
-        Name:   "Reds",  
-        Colors: []string{"Crimson", "Red", "Ruby", "Maroon"},  
-    }  
+    result = ApiResult{
+        Code:apiCode,
+        Message:apiMsg,
+        Data:utils.StructToMap2(userList),
+    }
 
-     fmt.Println("result: ",group)
-     /**/
-     ret, err := json.Marshal(result)//转换成JSON返回的是[]byte
-     //var ret []ApiResult
-     //err:=json.Unmarshal(result, &ret) 
-     if err != nil {
-         fmt.Println("Error: ", err)
-     } 
-     fmt.Println(string(ret))
-     os.Stdout.Write(ret) 
-     
-    return string(ret)
+    resMap:=utils.StructToMap2(result)
+    fmt.Println("resData: ",resMap)
+
+        
+    return resMap
 }
 
+
+func GetUserList() map[string]interface{} {
+    userList,err := Domain.GetUserList()
+    
+    apiCode := "1"
+    apiMsg := "OK"
+    var result ApiResult
+    if (err!=nil){
+        fmt.Println(err)
+        apiCode = "2001"
+        apiMsg = "failed"
+    }
+    fmt.Println("userList: ",userList)
+    result = ApiResult{
+        Code:apiCode,
+        Message:apiMsg,
+        Data:utils.StructToMap2(userList),
+    }
+
+    resMap:=utils.StructToMap2(result)
+    fmt.Println("resData: ",resMap)
+
+        
+    return resMap
+}

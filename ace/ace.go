@@ -5,6 +5,7 @@ import (
 	"github.com/plimble/utils/pool"
 	"net/http"
 	"sync"
+	"fmt"
 )
 
 var bufPool = pool.NewBufferPool(100)
@@ -42,6 +43,10 @@ func New() *Ace {
 		c.Writer = &c.writercache
 		return c
 	}
+
+	a.httprouter.GET("/hello/:uid",func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		fmt.Fprintf(w, "hello, %s!\n", ps.ByName("uid"))
+	})
 
 	a.httprouter.PanicHandler = func(w http.ResponseWriter, req *http.Request, rcv interface{}) {
 		c := a.createContext(w, req)

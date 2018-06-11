@@ -13,11 +13,20 @@ func (User) TableName() string {
 	return "user"
 }
 
-func GetInfo(id int) (User, error) {
+func GetUserInfo(id int) (User, error) {
 
 	User := User{}
 	err := framework.GetORM().Where("id = ?", id).First(&User).Error
 	return User, err
+}
+
+func GetUserList() ([]User,error) {
+	UserList := []User{}
+	err := framework.GetORM().Find(&UserList).Error
+	if err != nil {
+		return nil,err
+	}
+	return UserList,nil
 }
 
 func (this *User)GetInfoById(id int) (User, error) {
